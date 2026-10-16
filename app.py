@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
 # إعدادات الصفحة
 st.set_page_config(page_title="PivotAI - مستقبل المهنة", page_icon="🚀")
@@ -21,11 +21,13 @@ if st.button("حلل مستقبلي المهني الآن"):
         st.warning("من فضلك املأ جميع الخانات.")
     else:
         try:
-            openai.api_key = api_key
+            # النظام الجديد لـ OpenAI
+            client = OpenAI(api_key=api_key)
+            
             with st.spinner('جاري تحليل سوق العمل لعام 2027...'):
                 prompt = f"أنت خبير مهني لعام 2027. المستخدم يعمل كـ {job} ومهاراته هي {skills}. أعطه نسبة خطورة استبداله بالذكاء الاصطناعي، ووظيفة بديلة مقترحة، وخطة تعلم من 3 خطوات. اجعل الإجابة باللغة العربية وبتنسيق جميل ومنظم باستخدام النقاط."
                 
-                response = openai.ChatCompletion.create(
+                response = client.chat.completions.create(
                     model="gpt-3.5-turbo", 
                     messages=[{"role": "user", "content": prompt}]
                 )
@@ -39,3 +41,4 @@ if st.button("حلل مستقبلي المهني الآن"):
 
 st.markdown("---")
 st.caption("تم التطوير بواسطة PivotAI © 2024")
+
